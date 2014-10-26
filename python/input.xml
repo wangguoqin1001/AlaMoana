@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<app>
+	<configuration>
+		<colorInWork value="magenta" />
+		<colorPaused value="cyan" />
+		<strFree> is really free</strFree>
+		<strWorking> working on </strWorking>
+		<strPause>Pause</strPause>
+		<strPaused>is paused</strPaused>
+	</configuration>
+	<widgets>
+		<agent name="AgentA" background="white" width="50" height="5" />
+		<agent name="AgentB" background="white" width="50" height="5" />
+		<agent name="AgentC" background="white" width="50" height="5" />
+		<work name="WorkA"  background="green" width="10" height="5" />
+		<work name="WorkB" background="green" width="10" height="5" />
+		<work name="WorkC" background="green" width="10" height="5" />
+	</widgets>
+</app>
