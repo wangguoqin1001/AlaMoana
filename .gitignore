@@ -103,3 +103,14 @@ IOS/www/
 # Files that might appear on external disk
 .Spotlight-V100
 .Trashes
+
+# cordova derived copies of the project (all platforms)
+platforms/*/assets/www
+
+# cordova android platform specialties
+platforms/android/ant-build
+platforms/android/ant-gen
+platforms/android/CordovaLib/ant-build
+platforms/android/CordovaLib/ant-gen
+platforms/android/local.properties
+platforms/android/CordovaLib/local.properties
