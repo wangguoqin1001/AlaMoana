@@ -2,7 +2,8 @@
 	margin: 0;
 	padding: 0;
 }
-#header{
+
+#header {
 	height: 44px;
 	background-color: #0088D1;
 	text-align: center;
@@ -11,48 +12,65 @@
 	color: white;
 }
 
-#panel1 textarea{
-	display: block;
-	margin: 10px 10px;
-}
-#panel1 button{
-	display: block;
-	width: 100px;
-	height: 35px;
-	margin: 10px 10px;
+#agents {
+	width: 40%;
+	float: left;
 }
 
-
-#panel2{
-	display: none;
+#agents .agentsrow {
+	height: 50px;
 }
 
-#panel2 textarea{
-	margin: 10px 10px;
+#agents .agentsrow .agent {
+	height: 80%;
+	width: 30%;
+	margin: 10px;
+}
+
+#agents .agentsrow .pause {
+	height: 80%;
+	width: 30%;
+	margin: 10px;
+}
+
+#works {
+	width: 40%;
+	float: left;
+}
+
+#works .worksrow {
+	height: 50px;
+}
+
+#works .worksrow .work {
+	height: 80%;
+	width: 30%;
+	margin: 10px;
 }
 
 #footer {
-	height:49px;
+	height: 49px;
 	width: 100%;
 	background-color: #0088D1;
 	border: none;
 	border-top: 1px solid #0088D1;
-	position:fixed;
-	bottom:0
+	position: fixed;
+	bottom: 0;
 }
 
-#footer button{
-	width: 47%;
-	height: 90%;
-	border: none;
-	margin-top: 3px;
-	margin-left: 5px;
-	background-color: transparent;
-	color: white;
-	font-weight: bold;
-	font-size: 16px;
+#footer #footer_buttons {
+	height: 80%;
+	width: 80%;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	margin: auto;
 }
 
-#footer .pressed {
-	background-color: #00AEEF;
+#footer #footer_buttons button {
+	height: 100%;
+	width: 40%;
+	margin-left: 10px;
 }

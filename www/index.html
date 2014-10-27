@@ -7,23 +7,30 @@
         <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
+        <title>My App</title>
     </head>
     <body>
-        <div >
+        <div>
 			<div id="header">
-				<h1>编辑</h1>
+				<h1>My App</h1>
 			</div>
-            <div id="panel1" >
-				<textarea id="edit" rows="8" cols="40" placeholder="enter"></textarea>
-				<button id="next">第二页</button>
-            </div>
-            <div id="panel2" >
-				<textarea id="show" rows="30" cols="40"  placeholder="enter" disabled></textarea>
-            </div>
+			<div id="agents">
+				<div class="agentsrow">
+					<button class="agent">Agent</button>
+					<button class="pause">Pause</button>
+				</div>
+			</div>
+			<div id="works">
+				<div class="worksrow">
+					<button class="work">Work</button>
+				</div>
+			</div>
+			<div style='clear:both;'></div>
 			<div id="footer">
-				<button id="first" class="pressed">第一页</button>
-				<button id="second">第二页</button>
+				<div id="footer_buttons">
+					<button id="addagent">Add an agent</button>
+					<button id="addwork">Add a work</button>
+				</div>
 			</div>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
