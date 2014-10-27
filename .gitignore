@@ -100,6 +100,10 @@ IOS/www/
 # Thumbnails
 ._*
  
+# VI swap files
+*.swp
+*.swo
+ 
 # Files that might appear on external disk
 .Spotlight-V100
 .Trashes
@@ -114,3 +118,6 @@ platforms/android/CordovaLib/ant-build
 platforms/android/CordovaLib/ant-gen
 platforms/android/local.properties
 platforms/android/CordovaLib/local.properties
+
+# output file of python program
+python/output.db
