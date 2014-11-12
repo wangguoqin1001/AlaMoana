@@ -25,6 +25,19 @@
 	height: 80%;
 	width: 30%;
 	margin: 10px;
+
+	border-top: solid 2px #eaeaea;
+	border-left: solid 2px #eaeaea;
+	border-bottom: solid 2px #777;
+	border-right: solid 2px #777;
+	padding: 5px 5px;
+}
+
+#agents .agentsrow .agent.down {
+	border-top: solid 2px #777;
+	border-left: solid 2px #777;
+	border-bottom: solid 2px #eaeaea;
+	border-right: solid 2px #eaeaea;
 }
 
 #agents .agentsrow .pause {
@@ -46,6 +59,19 @@
 	height: 80%;
 	width: 30%;
 	margin: 10px;
+
+	border-top: solid 2px #eaeaea;
+	border-left: solid 2px #eaeaea;
+	border-bottom: solid 2px #777;
+	border-right: solid 2px #777;
+	padding: 5px 5px;
+}
+
+#works .worksrow .work.down {
+	border-top: solid 2px #777;
+	border-left: solid 2px #777;
+	border-bottom: solid 2px #eaeaea;
+	border-right: solid 2px #eaeaea;
 }
 
 #footer {
