@@ -12,6 +12,13 @@ function pushDB (table, data) {
 }
 
 
+function popDB (table) {
+	var orig = JSON.parse (localStorage.getItem (table)) || [];
+	orig.pop();
+	localStorage.setItem (table, JSON.stringify (orig));
+}
+
+
 function setDefaultConfig() {
 	config = new Object();
 	config["colorInWork"] = "magenta";
@@ -75,16 +82,6 @@ function initVariables() {
 }
 
 
-function agentsAllRaised() {
-	$(".agent").removeClass ("down");
-}
-
-
-function worksAllRaised() {
-	$(".work").removeClass ("down");
-}
-
-
 function startTimer() {
 	current_agent.parent().find (".agent_work").val (current_work.parent().find (".work_name").val());
 
@@ -113,7 +110,7 @@ function stopTimer (agent) {
 		"work":			agent.parent().find (".agent_work").val(),
 		"duration":		duration,
 		"starttime":	agent.parent().find (".agent_starttime").val(),
-		"endtime":		now
+		"endtime":		now.toString()
 	};
 	pushDB ("duration", data);
 
@@ -127,78 +124,172 @@ function stopTimer (agent) {
 }
 
 
-function setAgent() {
-	agentsAllRaised();
+function diffTime (diff) {
+	var ms = diff % 1000;
+	diff = Math.floor (diff / 1000);
+	var sec = diff % 60;
+	diff = Math.floor (diff / 60);
+	var min = diff % 60;
+	diff = Math.floor (diff / 60);
+	var hr = diff % 24;
+	diff = Math.floor (diff / 24);
+	var day = diff;
 
-	if ($(this).parent().find (".agent_starttime").val() != "") {
-		stopTimer ($(this));
-		worksAllRaised();
-		$(this).html ($(this).parent().find (".agent_name").val() + strFree);
-		$(this).css ('background', $(this).parent().find (".agent_background").val());
-	} else {
-		$(this).addClass ("down");
-		current_agent = $(this);
-
-		if (current_work != null) {
-			$(this).html ($(this).parent().find (".agent_name").val() + strWorking + current_work.parent().find (".work_name").val());
-			$(this).css ('background', colorInWork);
-			startTimer();
-		}
-	}
-}
-
-
-function setAgentPause() {
-	if ($(this).parent().find (".agent_work").val() != "") {
-		if ($(this).parent().find (".agent_periodstarttime").val() != "") {
-			now = new Date();
-			var duration = now - new Date ($(this).parent().find (".agent_periodstarttime").val()) + (parseInt ($(this).parent().find (".agent_duration").val()) || 0);
-			$(this).parent().find (".agent_duration").val (duration);
-			$(this).parent().find (".agent_periodstarttime").val("");
-
-			var data = {
-				"agent":		$(this).parent().find (".agent_name").val(),
-				"work":			$(this).parent().find (".agent_work").val(),
-				"duration":		duration,
-				"starttime":	$(this).parent().find (".agent_starttime").val(),
-				"endtime":		now
-			};
-			pushDB ("pause", data);
-
-			$(this).parent().find (".agent").html ($(this).parent().find (".agent_name").val() + strPaused);
-			$(this).parent().find (".agent").css ('background', colorPaused);
-
-		} else {
-			now = new Date();
-			$(this).parent().find (".agent_periodstarttime").val (now);
-			if ($(this).parent().find (".agent_starttime").val() == "") {
-				$(this).parent().find (".agent_starttime").val (now);
+	ret = ms + 'ms';
+	if (sec) {
+		ret = sec + 's' + ret;
+		if (min) {
+			ret = min + 'm' + ret;
+			if (hr) {
+				ret = hr + 'h' + ret;
+				if (day) {
+					ret = day + 'd' + ret;
+				}
 			}
-
-			$(this).parent().find (".agent").html ($(this).parent().find (".agent_name").val() + strWorking + $(this).parent().find (".agent_work").val());
-			$(this).parent().find (".agent").css ('background', colorInWork);
 		}
 	}
-}
-
-
-function setWork() {
-	worksAllRaised();
-	$(this).addClass ("down");
-
-	current_work = $(this);
-	if (current_agent != null) {
-		current_agent.html (current_agent.parent().find (".agent_name").val() + strWorking + $(this).parent().find (".work_name").val());
-		current_agent.css ('background', colorInWork);
-		startTimer();
-	}
+	return ret;
 }
 
 
 function delegates() {
-	$("body").delegate (".agent", "click", setAgent);
-	$("body").delegate (".pause", "click", setAgentPause);
-	$("body").delegate (".work", "click", setWork);
+	$("body").delegate (".agent", "click", function() {
+		$(".agent").removeClass ("down");
+
+		if ($(this).parent().find (".agent_starttime").val() != "") {
+			stopTimer ($(this));
+			$(".work").removeClass ("down");
+			$(this).html ($(this).parent().find (".agent_name").val() + strFree);
+			$(this).css ('background', $(this).parent().find (".agent_background").val());
+		} else {
+			$(this).addClass ("down");
+			current_agent = $(this);
+
+			if (current_work != null) {
+				$(this).html ($(this).parent().find (".agent_name").val() + strWorking + current_work.parent().find (".work_name").val());
+				$(this).css ('background', colorInWork);
+				startTimer();
+			}
+		}
+	});
+
+
+	$("body").delegate (".pause", "click", function() {
+		if ($(this).parent().find (".agent_work").val() != "") {
+			if ($(this).parent().find (".agent_periodstarttime").val() != "") {
+				now = new Date();
+				var duration = now - new Date ($(this).parent().find (".agent_periodstarttime").val()) + (parseInt ($(this).parent().find (".agent_duration").val()) || 0);
+				$(this).parent().find (".agent_duration").val (duration);
+				$(this).parent().find (".agent_periodstarttime").val("");
+
+				var data = {
+					"agent":		$(this).parent().find (".agent_name").val(),
+					"work":			$(this).parent().find (".agent_work").val(),
+					"duration":		duration,
+					"starttime":	$(this).parent().find (".agent_starttime").val(),
+					"endtime":		now.toString()
+				};
+				pushDB ("pause", data);
+
+				$(this).parent().find (".agent").html ($(this).parent().find (".agent_name").val() + strPaused);
+				$(this).parent().find (".agent").css ('background', colorPaused);
+
+			} else {
+				now = new Date();
+				$(this).parent().find (".agent_periodstarttime").val (now);
+				if ($(this).parent().find (".agent_starttime").val() == "") {
+					$(this).parent().find (".agent_starttime").val (now);
+				}
+
+				$(this).parent().find (".agent").html ($(this).parent().find (".agent_name").val() + strWorking + $(this).parent().find (".agent_work").val());
+				$(this).parent().find (".agent").css ('background', colorInWork);
+			}
+		}
+	});
+
+
+	$("body").delegate (".work", "click", function() {
+		$(".work").removeClass ("down");
+		$(this).addClass ("down");
+
+		current_work = $(this);
+		if (current_agent != null) {
+			current_agent.html (current_agent.parent().find (".agent_name").val() + strWorking + $(this).parent().find (".work_name").val());
+			current_agent.css ('background', colorInWork);
+			startTimer();
+		}
+	});
+
+
+	$("body").delegate ("#addagent", "click", function() {
+		var newparams = {
+			"name":			prompt ("Agent Name", "Agent"),
+			"background":	prompt ("Agent Color", "white")
+		}
+		var newagent = $("#agents .agentsrow:first").clone();
+		parseAgent (newagent, newparams, $("#agents .agentsrow").length)
+		newagent.appendTo ("#agents");
+		pushDB ("agentlist", newparams);
+	});
+
+
+	$("body").delegate ("#removeagent", "click", function() {
+		if ($("#agents .agentsrow").length > 1) {
+			$("#agents .agentsrow:last").remove();
+			popDB ("agentlist");
+		}
+	});
+
+
+	$("body").delegate ("#addwork", "click", function() {
+		var newparams = {
+			"name":			prompt ("Work Name", "Work"),
+			"background":	prompt ("Work Color", "green")
+		}
+		var newwork = $("#works .worksrow:first").clone();
+		parseWork (newwork, newparams, $("#works .worksrow").length)
+		newwork.appendTo ("#works");
+		pushDB ("worklist", newparams);
+	});
+
+
+	$("body").delegate ("#removework", "click", function() {
+		if ($("#works .worksrow").length > 1) {
+			$("#works .worksrow:last").remove();
+			popDB ("worklist");
+		}
+	});
+
+
+	$("body").delegate ("#showdata", "click", function() {
+		var duration = JSON.parse (window.localStorage.getItem ("duration"));
+		var duration_table = "<h1 align=center>Duration Record Table</h1><table width=90%><tr><th>ID</th><th>Agent Name</th><th>Work Name</th><th>Whole Period Work Duration</th><th>Start Time</th><th>End Time</th></tr>";
+		if (duration) {
+			for (var i=0; i < duration.length; i++) {
+				var item = duration[i];
+				duration_table += "<tr><td>" + i + "</td><td>" + item["agent"] + "</td><td>" + item["work"] + "</td><td>" + diffTime (item["duration"]) + "</td><td>" + item["starttime"] + "</td><td>" + item["endtime"] + "</td></tr>";
+			}
+		}
+		duration_table += "</table>";
+
+		var pause = JSON.parse (window.localStorage.getItem ("pause"));
+		var pause_table = "<h1 align=center>Pause Record Table</h1><table width=90%><tr><th>ID</th><th>Agent Name</th><th>Work Name</th><th>Work Time from Beginning</th><th>Beginning Time</th><th>End Time</th></tr>";
+		if (pause) {
+			for (var i=0; i < pause.length; i++) {
+				var item = pause[i];
+				pause_table += "<tr><td>" + i + "</td><td>" + item["agent"] + "</td><td>" + item["work"] + "</td><td>" + diffTime (item["duration"]) + "</td><td>" + item["starttime"] + "</td><td>" + item["endtime"] + "</td></tr>";
+			}
+		}
+		pause_table += "</table>";
+
+		$("#agents").html (duration_table);
+		$("#works").html (pause_table);
+
+		$("#showdata").html ("Hide Database");
+		$("#showdata").click (function() {
+			location.reload();
+		});
+	});
 }
 
 
